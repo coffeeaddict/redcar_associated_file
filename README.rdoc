@@ -1,0 +1,17 @@
+= Redcar Associated File Plugin
+
+== TODO
+
+Write a decent readme.
+
+== What is it?
+
+In a Netbeans Rails Project you can open a view from the action under cursor
+in the controller you are editing by hitting shft-ctrl-a. That is neat and
+useful.
+
+This plugin is to mimic that behaviour. Once.
+
+== Copyright
+
+This plugin is licensed under the MIT license. See LICENSE.txt for more info.
