@@ -7,8 +7,6 @@ module Redcar
   # shift-ctrl-t : load test/spec <-> lib/model
   # shift-ctrl-y : load test <-> fixture
   class AssociatedFile
-    CAN_NOT_COMPLY = :can_not_comply
-    
     def self.menus
       Menu::Builder.build do
         sub_menu "Project" do
@@ -37,13 +35,13 @@ module Redcar
     end
   
     class AssociatedCommand < EditTabCommand
-      attr_accessor :file_path, :project_root
+      attr_accessor :project_root, :file_path
       
       # check for remote project and display a dialog if so
       def remote_project?
         # just assuming that this is true
         if Project::Manager.focussed_project.remote?
-          Application::Dialog.message_box("Go to declaration doesn't work in remote projects yet :(")
+          Application::Dialog.message_box("Open associated file doesn't work in remote projects yet")
           return true
         end
         
@@ -57,6 +55,21 @@ module Redcar
         DocumentSearch::FindNextRegex.new(re,true).run_in_focussed_tab_edit_view
       end
       
+      # search backwards for a function definition
+      #
+      def find_function_under_cursor
+        position = doc.cursor_offset
+        area = doc.get_all_text[0..position]
+        area.reverse!
+        
+        re = Regexp.new /\n^\s*([\w\&\*\(\)\s]+) fed\s*\n/
+        if ( match = area.match(re) )
+          return match[1].reverse
+        end
+      
+        nil
+      end
+      
       def log message
         puts "-=-> AF: #{message}"
       end
@@ -64,7 +77,6 @@ module Redcar
     
     # Open the related (rails) view when in controller and vice versa
     class OpenViewControllerCommand < AssociatedCommand
-      
       def execute
         return if remote_project?
         
@@ -79,7 +91,7 @@ module Redcar
         end
         
         self.project_root = root
-        self.file_path    = doc.path.gsub!(root, "")
+        self.file_path    = doc.path.gsub(root, "")
         
         # if the doc is a controller, show the view and vice versa
         if file_path =~ /controllers\/\w+_controller.rb/
@@ -89,21 +101,38 @@ module Redcar
         end
       end
       
+      # open the view from the controller
       def switch_to_view
-      end
-      
-      # open the controller 
-      def switch_to_controller
-        unless ( match = self.file_path.match(/\/views\/([^\/]+)/) )
+        unless ( match = file_path.match(/controllers\/(\w+)_controller.rb/) )
           return
         end
-        action     = File.basename(self.file_path).split(".").first
-        name       = match[1]
-        controller = File.join(self.project_root, "/app/controllers/#{name}_controller.rb")
+        # figure out what the name of def we are in is
+        action = find_function_under_cursor
+        view   = File.join(project_root, "/app/views/#{match[1]}/#{action}")
         
-        definition = "def #{action}"
+        # open the according view (most likely non existant)
+        if !File.exists?(view)
+          %w(erb html.erb haml js.erb xml.erb).each do |try|
+            if File.exists?("#{view}.#{try}")
+              view += ".#{try}"
+              break
+            end
+          end
+        end
         
-        goto_definition(controller, definition)
+        Project::Manager.open_file view if File.exists?(view)
+      end
+      
+      # open the controller from the view
+      def switch_to_controller
+        unless ( match = file_path.match(/\/views\/([^\/]+)/) )
+          return
+        end
+        
+        action     = File.basename(file_path).split(".").first
+        controller = File.join(project_root, "/app/controllers/#{match[1]}_controller.rb")        
+        
+        goto_definition controller, "def #{action}"
       end
     end
     
