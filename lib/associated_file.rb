@@ -7,15 +7,15 @@ module Redcar
   # shift-ctrl-t : load test/spec <-> lib/model
   # shift-ctrl-y : load test <-> fixture
   class AssociatedFile
+    CAN_NOT_COMPLY = :can_not_comply
+    
     def self.menus
-      Menu::Buidler.build do
-        sub_menu "File" do
+      Menu::Builder.build do
+        sub_menu "Project" do
           sub_menu "Associated File" do
-            item "Open associated view", OpenViewCommand
-            item "Open associated controller", OpenControllerCommand
-            item "Open associated test", OpenTestCommand
-            item "Open associated class", OpenClassCommand
-            item "Open associated fixture", OpenFixtureCommand
+            item "Open associated view/controller", OpenViewControllerCommand
+            item "Open associated test/class", OpenTestClassCommand            
+            item "Open associated test/fixture", OpenTestFixtureCommand
           end
         end
       end
@@ -23,16 +23,42 @@ module Redcar
     
     def self.keymaps
       linwin = Keymap.build("main", [ :linux, :windows ]) do
-        link "Shift+Ctrl+A", AssociatedFile::OpenViewCommand
+        link "Shift+Ctrl+A", AssociatedFile::OpenViewControllerCommand
+        link "Shift+Ctrl+T", AssociatedFile::OpenTestClassCommand
+        link "Shift+Ctrl+Y", AssociatedFile::OpenTestFixtureCommand
       end
       osx = Keymap.build("main", :osx) do
-        link "Shift+Cmd+A", AssociatedFile::OpenViewCommand
+        link "Shift+Cmd+A", AssociatedFile::OpenViewControllerCommand
+        link "Shift+Cmd+T", AssociatedFile::OpenTestClassCommand
+        link "Shift+Cmd+Y", AssociatedFile::OpenTestFixtureCommand
       end
       
       [linwin, osx]
     end
   
-    class OpenViewCommand < Command
+    class AssociatedCommand < EditTabCommand
+      # check for remote project and display a dialog if so
+      def remote_project?
+        # just assuming that this is true
+        if Project::Manager.focussed_project.remote?
+          Application::Dialog.message_box("Go to declaration doesn't work in remote projects yet :(")
+          return true
+        end
+        
+        return false
+      end
+      
+      def log message
+        puts "-=-> AF: #{message}"
+      end
+    end
+    
+    class OpenViewControllerCommand < AssociatedCommand
+      def execute
+        return if remote_project?
+        
+        log doc.inspect
+      end  
     end
     
     class OpenControllerCommand < Command; end
