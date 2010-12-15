@@ -1,10 +1,15 @@
-1292441924
+1292443991
+AssociatedCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class AssociatedCommand 
 AssociatedFile	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	  class AssociatedFile
+CAN_NOT_COMPLY	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    CAN_NOT_COMPLY =
 OpenClassCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenClassCommand 
 OpenControllerCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenControllerCommand 
 OpenFixtureCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenFixtureCommand 
 OpenTestCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenTestCommand 
-OpenViewCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenViewCommand 
+OpenViewControllerCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenViewControllerCommand 
 Redcar	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	module Redcar
+execute	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	      def execute
 keymaps	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    def self.keymaps
+log	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	      def log 
 menus	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    def self.menus
+remote_project?	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	      def remote_project?
