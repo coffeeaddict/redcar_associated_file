@@ -1,0 +1,10 @@
+1292441924
+AssociatedFile	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	  class AssociatedFile
+OpenClassCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenClassCommand 
+OpenControllerCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenControllerCommand 
+OpenFixtureCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenFixtureCommand 
+OpenTestCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenTestCommand 
+OpenViewCommand	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    class OpenViewCommand 
+Redcar	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	module Redcar
+keymaps	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    def self.keymaps
+menus	/home/hartog/work/github/coffeeaddict/redcar_associated_file/lib/associated_file.rb	    def self.menus
