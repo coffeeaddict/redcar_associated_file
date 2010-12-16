@@ -12,6 +12,14 @@ useful.
 
 This plugin is to mimic that behaviour. Once.
 
+== State of this plugin
+
+UAD: This plugin is still Under Active Development - do not consider it
+Alpha, it is likely to be error prone and break your Redcar
+
+
 == Copyright
+
+(c) 2010 - Hartog de Mik
 
 This plugin is licensed under the MIT license. See LICENSE.txt for more info.
