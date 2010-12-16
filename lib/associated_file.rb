@@ -6,6 +6,10 @@ module Redcar
   # shift-ctrl-a : load view <-> controller
   # shift-ctrl-t : load test/spec <-> lib/model
   # shift-ctrl-y : load test <-> fixture
+  #
+  # TODO:
+  # * Distil required regex'en into a class/module/var
+  #
   class AssociatedFile
     def self.menus
       Menu::Builder.build do
