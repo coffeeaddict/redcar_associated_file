@@ -146,7 +146,53 @@ module Redcar
       end
     end
     
-    class OpenTestClassCommand < AssociatedCommand; end    
-    class OpenTestFixtureCommand < AssociatedCommand; end
+    class OpenTestClassCommand < AssociatedCommand
+      def execute
+        return if remote_project?
+                
+        self.project_root = Project::Manager.focussed_project.path
+        self.file_path    = doc.path.gsub(project_root, "")
+
+        if rails_project?
+          # if the doc is a controller, show the view and vice versa
+          if file_path =~ /controllers\/\w+_controller.rb/
+            switch_to_functional
+          elsif file_path =~ /test\/functional\/\w+_controller_test/
+            switch_to_controller
+          elsif file_path =~ /test\/unit\/\w+_test/
+            switch_to_model
+          end
+          
+        else
+          log "Non rails projects are not implemented yet"
+        end
+      end
+      
+      def switch_to_functional
+      end
+      
+      # TODO: We might be able to figure out what action this test belongs to
+      #
+      def switch_to_controller
+        unless ( match = file_path.match(/test\/functional\/(\w+_controller)_test/) )
+          return
+        end
+                
+        controller = File.join(project_root, "/app/controllers/#{match[1]}.rb")        
+        
+        unless File.exists? controller
+          log "No such controller"
+          return
+        end
+        
+        Project::Manager.open_file controller
+      end
+      
+      def switch_to_model
+      end
+    end
+    
+    class OpenTestFixtureCommand < AssociatedCommand
+    end
   end
 end
