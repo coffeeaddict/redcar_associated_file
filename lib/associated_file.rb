@@ -48,6 +48,24 @@ module Redcar
         return false
       end
       
+      def rails_project?
+        unless ( root = self.project_root )
+          log "the project root was not yet defined"
+          return false
+        end
+        
+        # first, lets see if the project root is a rails root - else do nothing
+        unless (
+          File.exists?(File.join(root, "config", "environment.rb")) and
+          File.exists?(File.join(root, "config", "boot.rb"))
+        )
+          log "You don't seem to be in a rails root"
+          return false
+        end
+        
+        true
+      end
+      
       def goto_definition file, definition
         Project::Manager.open_file file
         re = Regexp.new(Regexp.escape(definition))
@@ -80,18 +98,10 @@ module Redcar
       def execute
         return if remote_project?
         
-        root = Project::Manager.focussed_project.path
-        # first, lets see if the project root is a rails root - else do nothing
-        unless (
-          File.exists?(File.join(root, "config", "environment.rb")) and
-          File.exists?(File.join(root, "config", "boot.rb"))
-        )
-          log "You don't seem to be in a rails root"
-          return
-        end
+        self.project_root = Project::Manager.focussed_project.path
+        return unless rails_project?
         
-        self.project_root = root
-        self.file_path    = doc.path.gsub(root, "")
+        self.file_path    = doc.path.gsub(project_root, "")
         
         # if the doc is a controller, show the view and vice versa
         if file_path =~ /controllers\/\w+_controller.rb/
