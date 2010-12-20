@@ -1,6 +1,10 @@
 module Redcar
   class AssociatedFile
-    # Open the related (rails) view when in controller and vice versa
+    
+    # Open the related (rails) files:
+    # * controller[action] <--> view
+    # * model              ---> controller
+    #
     class OpenViewControllerCommand < AssociatedCommand
       def execute
         return if remote_project?
@@ -13,7 +17,7 @@ module Redcar
         # if the doc is a controller, show the view and vice versa
         if path_matcher.is_controller?
           switch_to_view
-        elsif path_matcher.is_view?
+        elsif path_matcher.is_view? or path_matcher.is_model?
           switch_to_controller
         end
       end
@@ -40,16 +44,26 @@ module Redcar
         open_file view
       end
       
-      # open the controller from the view
+      # open the controller from the view or model
       def switch_to_controller
-        unless ( name = path_matcher.view_name )
+        unless ( name = (path_matcher.view_name || path_matcher.model_name) )
           return
         end
         
-        action     = File.basename(file_path).split(".").first
+        action = nil
+	if path_matcher.is_view?
+	  action = File.basename(file_path).split(".").first
+        else
+	  name = name.pluralize
+        end
+
         controller = "/app/controllers/#{name}_controller.rb"
         
-        goto_definition controller, "def #{action}"
+        if action
+          goto_definition controller, "def #{action}"
+        else
+          open_file controller
+        end
       end
     end
   end
