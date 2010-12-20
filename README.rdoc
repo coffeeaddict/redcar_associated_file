@@ -1,21 +1,80 @@
 = Redcar Associated File Plugin
 
-== TODO
-
-Write a decent readme.
-
 == What is it?
 
 In a Netbeans Rails Project you can open a view from the action under cursor
 in the controller you are editing by hitting shft-ctrl-a. That is neat and
-useful.
-
-This plugin is to mimic that behaviour. Once.
+useful and I dearly missed that function. Since Redcar is plugin based
+(almost everything is a plugin) I decided to roll my own plugin. This plugin is
+to mimic that behaviour.
 
 == State of this plugin
 
-UAD: This plugin is still Under Active Development - do not consider it
-Alpha, it is likely to be error prone and break your Redcar
+Alpha: You can now consider this plugin to be in an alpha state.
+
+<strike>UAD: This plugin is still Under Active Development - do not consider it
+Alpha, it is likely to be error prone and break your Redcar</strike>
+
+=== What is supported
+
+For now, this is limited to Rails projects. Next up on my list are:
+
+* Jeweler
+* PHP
+* JAVA
+* Perl (CPAN Modules)
+* ...
+
+in random order.
+
+[shift-ctrl-a]  * Jump around between M, V and C
+                * Jump from a View to the corresponding Action, e.g.:
+                  +app/views/users/show.html.erb+ will lead you to
+                  +UsersController#show+
+                * Jump from an Action to the corresponding View, e.g.:
+                  +ProductController#index+ will open
+                  +app/views/products/index.html.erb+
+                * When opening the View, the following list of extensions is
+                  tried until one is found: erb, html.erb, haml, js.erb, xml.erb
+                * Jump from a Model to a Controller, e.g.: when in 
+                  +app/models/invoice.rb+ you will jump to
+                  +app/controllers/invoice_controller.rb+
+                
+[shift-ctrl-t]  * Jump around test files.
+                * For now, only opens the files and does not jump to the right 
+                  place yet.
+                * Opens the unit test for the fixture, e.g.: when in 
+                  +test/fixtures/customers.yml+ opens 
+                  +test/units/customer_test.rb+
+                * When in the unit test, opens the model, e.g.: when in
+                  +app/models/editor.rb+ opens +test/units/editor_test.rb+
+                * When in the model, opens the unit test
+                * When in the controller, opens the functional test, e.g:
+                  +app/controllers/books_controller.rb+ opens
+                  +test/functional/books_controller_test.rb+
+                * When in the functional test, opens the controller
+                  
+[shift-ctrl-y]  * Jump between unit tests and fixtures
+                * Opens the unit test for the fixture
+                * Opens the fixture for the unit test
+
+== Contributing
+
+If you would like to contribute, for instance by concocting a 
+solid way to change behaviour based on the likely opened project, please fork,
+make a topic branch and start coding.
+
+If you really want to help me with behavioural changes based on the open project
+a little discussion would be in order and very much appreciated. :-)
+
+== TODO
+
+* Jump from Controller#action to the most likely functional test
+* Jump from view to the most likely functional test
+* Jump from Model#method to the most likely unit test
+* Jump from a fixture to the first usage in the unit test
+* All the things I forgot to mention
+* <strike>Write a decent readme.</strike>
 
 
 == Copyright
