@@ -51,10 +51,10 @@ module Redcar
         end
         
         action = nil
-	if path_matcher.is_view?
-	  action = File.basename(file_path).split(".").first
+      	if path_matcher.is_view?
+      	  action = File.basename(file_path).split(".").first
         else
-	  name = name.pluralize
+      	  name = name.pluralize
         end
 
         controller = "/app/controllers/#{name}_controller.rb"
