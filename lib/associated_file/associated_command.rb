@@ -80,7 +80,7 @@ module Redcar
         area = doc.get_all_text[0..position]
         area.reverse!
         
-        function = Regexp.new /\n^\s*([\w\&\*\(\)\s\=\[\]\{\}\,\:\'\"]+) fed\s*\n/        
+        function = Regexp.new /\n\s*([\w\&\*\(\) \=\[\]\{\}\,\:\'\"]+) fed\s*\n/        
         if ( match = area.match(function) )
           return match[1].reverse
         end
@@ -94,7 +94,7 @@ module Redcar
         area = doc.get_all_text[0..position]
         area.reverse!
         
-        test = Regexp.new /\n^\s*[\"\']([^\"\']+)[\"\']\s*tset\s*\n/
+        test = Regexp.new /\n\s*od\s*[\"\']([^\"\']+)[\"\']\s*tset\s*\n/
         if ( match = area.match(test) )
           return match[1].reverse
         end
