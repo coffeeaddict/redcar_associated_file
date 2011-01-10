@@ -2,9 +2,9 @@ module Redcar
   class AssociatedFile
     if !const_defined? :ASSOCIATIONS
       ASSOCIATIONS = {        
-        :model      => /\/models\/(\w+).rb$/,
-        :controller => /\/controllers\/(\w+)_controller.rb$/,
-        :view       => /\/views\/([^\/]+)/,
+        :model      => /\/models\/([\w\/]+).rb$/,
+        :controller => /\/controllers\/([\w\/]+)_controller.rb$/,
+        :view       => /\/views\/([\w\/]+)\/[^\/]+$/,
         :functional => /test\/functional\/(\w+_controller)_(test|spec)/,
         :unit       => /test\/unit\/(\w+)_(test|spec)/,
         :fixture    => /test\/fixtures\/(\w+).yml$/i          
