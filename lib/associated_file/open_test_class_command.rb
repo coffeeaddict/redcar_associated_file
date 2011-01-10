@@ -37,18 +37,57 @@ module Redcar
         end
       end
       
+      # open the functional test and try to find a test for the current 
+      # function based on the function name
+      #
       def switch_to_functional
         return unless ( name = path_matcher.controller_name )
-                
-        open_file "/test/functional/#{name}_test.rb"        
+        function = find_function_under_cursor
+
+        # find the tests in the file
+        test_file = "/test/functional/#{name}_test.rb"
+        if !file_exists? test_file
+          test_file = "/test/functional/#{name}_controller_test.rb"
+        end
+           
+        # select a candidate to jump tp
+        regexp = Regexp.new(function)
+        candidates = get_tests(test_file).select { |t| t =~ regexp }
+        
+        if candidates.length > 0
+          log "Jumping to #{test_file}##{candidates.first}"
+          goto_definition test_file, candidates.first
+          
+        else
+          open_file test_file
+        end
+        
       end
       
-      # TODO: We might be able to figure out what action this test belongs to
+      # open the controller that belongs to this functional test.
       #
+      # Try to find a function based on 
       def switch_to_controller
         return unless ( name = path_matcher.functional_name )
-                
-        open_file "/app/controllers/#{name}.rb"        
+        
+        test = find_test_under_cursor
+        
+        # remove words from the test name that indicate the test
+        # then use the first word as the name of the function/action
+        #
+        test.sub!(/^should /i, '')
+        if test =~ /^(get|post|put|delete) /i
+          test.sub!(/^[^\s]+ /, '')
+        end
+        
+        function = test.split(/\s/).first
+        
+        controller = "/app/controllers/#{name}.rb"
+        if function.nil?
+          open_file controller
+        else
+          goto_definition controller, function
+        end
       end
       
       def switch_to_model
@@ -59,15 +98,41 @@ module Redcar
         open_file "/app/models/#{name}.rb"        
       end
       
+      # switch to the unit test file and select a unit test that has a name
+      # similar to the name of the function under cursor
+      #
       def switch_to_unit
         unless ( name = (path_matcher.model_name || path_matcher.fixture_name) )
           return
         end
         
-        name = name.singularize if path_matcher.is_fixture?
-        
-        open_file "/test/unit/#{name}_test.rb"        
+        test_file = "/test/unit/#{name}_test.rb"
+        if path_matcher.is_fixture?          
+          test_file = "/test/unit/#{name.singularize}_test.rb"
+          
+        elsif ( function = find_function_under_cursor )
+          function.gsub! '_', ' '
+          log "Looking for a test with '#{function}'"
+          regexp = Regexp.new(function)
+          
+          candidates = get_tests(test_file).select { |t| t =~ regexp }
+          if candidates.length > 0
+            return goto_definition test_file, candidates.first
+          end
+        end
+          
+        open_file test_file
       end
+      
+      
+      # get all the test names from a file
+      #
+      def get_tests file
+        contents = File.read(project_file(file))
+        contents.scan(/test [\'\"]([^\'\"]+)[\'\"] do/).flatten
+      end
+      
+      private :get_tests
     end
   end
 end
