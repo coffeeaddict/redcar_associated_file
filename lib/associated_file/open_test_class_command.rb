@@ -18,6 +18,9 @@ module Redcar
           if path_matcher.is_controller?
             switch_to_functional
             
+          elsif path_matcher.is_view?
+            switch_to_functional
+            
           elsif path_matcher.is_functional?
             switch_to_controller
             
@@ -41,27 +44,38 @@ module Redcar
       # function based on the function name
       #
       def switch_to_functional
-        return unless ( name = path_matcher.controller_name )
-        function = find_function_under_cursor
-
-        # find the tests in the file
+        return unless ( 
+          name = path_matcher.controller_name || path_matcher.view_name
+        )
+        
         test_file = "/test/functional/#{name}_test.rb"
         if !file_exists? test_file
           test_file = "/test/functional/#{name}_controller_test.rb"
         end
-           
-        # select a candidate to jump tp
-        regexp = Regexp.new(function)
-        candidates = get_tests(test_file).select { |t| t =~ regexp }
         
-        if candidates.length > 0
-          log "Jumping to #{test_file}##{candidates.first}"
-          goto_definition test_file, candidates.first
+        if path_matcher.is_view?
+          action = File.basename(file_path).split(".").first
+          regexp = Regexp.new(action)
           
-        else
-          open_file test_file
+          candidates = get_tests(test_file).select { |t| t =~ regexp }        
+          
+          if candidates.length > 0
+            log "Jumping to #{test_file}##{candidates.first}"
+            return goto_definition test_file, candidates.first
+          end
+          
+        elsif ( function = find_function_under_cursor )
+          # select a candidate to jump tp
+          regexp = Regexp.new(function)
+          candidates = get_tests(test_file).select { |t| t =~ regexp }        
+          
+          if candidates.length > 0
+            log "Jumping to #{test_file}##{candidates.first}"
+            return goto_definition test_file, candidates.first
+          end          
         end
         
+        open_file test_file
       end
       
       # open the controller that belongs to this functional test.
