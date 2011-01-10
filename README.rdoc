@@ -69,9 +69,6 @@ a little discussion would be in order and very much appreciated. :-)
 
 == TODO
 
-* Jump from Controller#action to the most likely functional test
-* Jump from view to the most likely functional test
-* Jump from Model#method to the most likely unit test
 * Jump from a fixture to the first usage in the unit test
 * All the things I forgot to mention
 
