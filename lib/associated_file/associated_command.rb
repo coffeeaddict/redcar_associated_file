@@ -53,13 +53,22 @@ module Redcar
         true
       end
       
-      # open a file with the project manager
-      #
-      def open_file file
+      def project_file file
         if !file.include? project_root
           file = File.join(project_root, file)
         end
         
+        return file
+      end
+      
+      def file_exists? file
+        File.exists? project_file(file)
+      end
+      
+      # open a file with the project manager
+      #
+      def open_file file
+        file = project_file(file)
         return(Project::Manager.open_file(file)) if File.exists?(file)
         log "No such file: #{file}"
       end
