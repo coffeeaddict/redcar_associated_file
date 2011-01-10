@@ -40,8 +40,6 @@ shift-ctrl-a::  MVC, stuffs
                 
 shift-ctrl-t::  Test stuffs
                 * Jump around test files.
-                * For now, only opens the files and does not jump to the right 
-                  place yet.
                 * Opens the unit test for the fixture, e.g.: when in 
                   +test/fixtures/customers.yml+ opens 
                   +test/units/customer_test.rb+
@@ -52,6 +50,10 @@ shift-ctrl-t::  Test stuffs
                   +app/controllers/books_controller.rb+ opens
                   +test/functional/books_controller_test.rb+
                 * When in the functional test, opens the controller
+                * When in a view, opens the functional test for the controller
+                * When there is a function under the cursor, or when you are in a view
+                  the first test that has a name similar to the function/action name is 
+                  selected
                   
 shift-ctrl-y::  Fixture stuffs
                 * Jump between unit tests and fixtures
