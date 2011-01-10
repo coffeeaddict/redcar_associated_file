@@ -3,8 +3,9 @@ module Redcar
     if !const_defined? :ASSOCIATIONS
       ASSOCIATIONS = {        
         :model      => /\/models\/([\w\/]+).rb$/,
-        :controller => /\/controllers\/([\w\/]+)_controller.rb$/,
         :view       => /\/views\/([\w\/]+)\/[^\/]+$/,
+        :controller => /\/controllers\/([\w\/]+)_controller.rb$/,
+        
         :functional => /test\/functional\/(\w+_controller)_(test|spec)/,
         :unit       => /test\/unit\/(\w+)_(test|spec)/,
         :fixture    => /test\/fixtures\/(\w+).yml$/i          
@@ -14,12 +15,7 @@ module Redcar
     # match a file to it's associated function
     class AssociationMatcher
       attr_reader :file_path
-      
-      
-      def log msg
-        $stderr.puts " -=-> AF: #{msg}"
-      end
-      
+            
       def initialize file_path
         @file_path = file_path
       end
@@ -32,7 +28,7 @@ module Redcar
             is_it = "is_#{function}?".to_sym
             
             define_method name do
-              if ( match = self.file_path.match(regex) )
+              if ( match = self.file_path.match(regex) )                
                 return match[1].downcase
               end
               nil

@@ -89,9 +89,9 @@ module Redcar
         area = doc.get_all_text[0..position]
         area.reverse!
         
-        function = Regexp.new /\n\s*([\w\&\*\(\) \=\[\]\{\}\,\:\'\"]+) fed\s*\n/        
+        function = Regexp.new /\n\s*([\w\&\*\(\) \=\[\]\{\}\,\:\'\"]+) fed\s*\n/
         if ( match = area.match(function) )
-          return match[1].reverse
+          return match[1].reverse.split(/[ \(]/).first
         end
       
         nil
