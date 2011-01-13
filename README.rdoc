@@ -24,41 +24,49 @@ For now, this is limited to Rails projects. Next up on my list are:
 
 in random order.
 
-shift-ctrl-a::  MVC, stuffs
-                * Jump around between M, V and C
-                * Jump from a View to the corresponding Action, e.g.:
-                  +app/views/users/show.html.erb+ will lead you to
-                  +UsersController#show+
-                * Jump from an Action to the corresponding View, e.g.:
-                  +ProductController#index+ will open
-                  +app/views/products/index.html.erb+
-                * When opening the View, the following list of extensions is
-                  tried until one is found: erb, html.erb, haml, js.erb, xml.erb
-                * Jump from a Model to a Controller, e.g.: when in 
-                  +app/models/invoice.rb+ you will jump to
-                  +app/controllers/invoice_controller.rb+
+== How to use it
+
+You can jump around files with a simple key press. Here's the keys, what they
+do and the rules they follow:
+
+shft-ctrl-a::  MVC, stuffs
+               * Jump around between M, V and C
+               * Jump from a View to the corresponding Action, e.g.:
+                 +app/views/users/show.html.erb+ will lead you to
+                 +UsersController#show+
+               * Jump from an Action to the corresponding View, e.g.:
+                 +ProductController#index+ will open
+                 +app/views/products/index.html.erb+
+               * When opening the View, the following list of extensions is
+                 tried until one is found: erb, html.erb, haml, js.erb, xml.erb
+               * Jump from a Model to a Controller, e.g.: when in 
+                 +app/models/invoice.rb+ you will jump to
+                 +app/controllers/invoice_controller.rb+
                 
-shift-ctrl-t::  Test stuffs
-                * Jump around test files.
-                * Opens the unit test for the fixture, e.g.: when in 
-                  +test/fixtures/customers.yml+ opens 
-                  +test/units/customer_test.rb+
-                * When in the unit test, opens the model, e.g.: when in
-                  +app/models/editor.rb+ opens +test/units/editor_test.rb+
-                * When in the model, opens the unit test
-                * When in the controller, opens the functional test, e.g:
-                  +app/controllers/books_controller.rb+ opens
-                  +test/functional/books_controller_test.rb+
-                * When in the functional test, opens the controller
-                * When in a view, opens the functional test for the controller
-                * When there is a function under the cursor, or when you are in a view
-                  the first test that has a name similar to the function/action name is 
-                  selected
+shft-ctrl-t::  Test stuffs
+               * Jump around test files.
+               * Opens the unit test for the fixture, e.g.: when in 
+                 +test/fixtures/customers.yml+ opens 
+                 +test/units/customer_test.rb+
+               * When in the unit test, opens the model, e.g.: when in
+                 +app/models/editor.rb+ opens +test/units/editor_test.rb+
+               * When in the model, opens the unit test
+               * When in the controller, opens the functional test, e.g:
+                 +app/controllers/books_controller.rb+ opens
+                 +test/functional/books_controller_test.rb+
+               * When in the functional test, opens the controller
+               * When in a view, opens the functional test for the controller
+               * When there is a function under the cursor, or when you are in
+                 a view the first test that has a name similar to the
+                 function/action name is selected
                   
-shift-ctrl-y::  Fixture stuffs
-                * Jump between unit tests and fixtures
-                * Opens the unit test for the fixture
-                * Opens the fixture for the unit test
+shft-ctrl-y::  Fixture stuffs
+               * Jump between unit tests and fixtures
+               * Opens the unit test for the fixture
+               * Opens the fixture for the unit test
+
+When the corresponding file does not exist, but the directory it is supposed 
+to live in does, the file will be created with a comment on top.
 
 == Contributing
 
@@ -73,6 +81,7 @@ a little discussion would be in order and very much appreciated. :-)
 
 * Jump from a fixture to the first usage in the unit test
 * All the things I forgot to mention
+* Add shft-ctrl-m to jump between controllers (& views) and models
 
 
 == Copyright
