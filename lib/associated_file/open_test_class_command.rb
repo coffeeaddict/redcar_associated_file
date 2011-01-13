@@ -84,24 +84,24 @@ module Redcar
       def switch_to_controller
         return unless ( name = path_matcher.functional_name )
         
-        test = find_test_under_cursor
-        
-        # remove words from the test name that indicate the test
-        # then use the first word as the name of the function/action
-        #
-        test.sub!(/^should /i, '')
-        if test =~ /^(get|post|put|delete) /i
-          test.sub!(/^[^\s]+ /, '')
-        end
-        
-        function = test.split(/\s/).first
-        
         controller = "/app/controllers/#{name}.rb"
-        if function.nil?
-          open_file controller
-        else
-          goto_definition controller, function
+        
+        if (test = find_test_under_cursor)        
+          # remove words from the test name that indicate the test
+          # then use the first word as the name of the function/action
+          #
+          test.sub!(/^should /i, '')
+          if test =~ /^(get|post|put|delete) /i
+            test.sub!(/^[^\s]+ /, '')
+          end
+          
+          function = test.split(/\s/).first
+          unless function.nil?
+            return goto_definition(controller, function)
+          end
         end
+        
+        open_file controller
       end
       
       def switch_to_model
@@ -142,6 +142,7 @@ module Redcar
       # get all the test names from a file
       #
       def get_tests file
+        return [] if !file_exists? file
         contents = File.read(project_file(file))
         contents.scan(/test [\'\"]([^\'\"]+)[\'\"] do/).flatten
       end
