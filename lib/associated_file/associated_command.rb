@@ -69,7 +69,16 @@ module Redcar
       #
       def open_file file
         file = project_file(file)
-        return(Project::Manager.open_file(file)) if File.exists?(file)
+        unless File.exists?(file)
+          if File.exists? File.dirname file
+            log "There is no file, but the directory exists. Boldly making " + File.basename(file)
+            File.open(file, File::CREAT|File::TRUNC|File::WRONLY) do |f|
+              f.puts "# created by the associated file plugin :-)"
+            end
+          end
+        end
+        
+        return(Project::Manager.open_file(file)) 
         log "No such file: #{file}"
       end
       
